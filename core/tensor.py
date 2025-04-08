@@ -41,3 +41,21 @@ class Tensor:
         return tuple(shape)
 
 
+
+
+
+
+
+
+list1 = [1, 2, 3]
+list2 = [4, 5, 6]
+list3 = [7, 8, 9]
+list4 = [10, 11, 12]
+list5 = [13, 14, 15]
+
+tensor = Tensor(data=[list1, list2, list3, list4, list5])
+
+print(tensor._shape)
+print(tensor)
+
+
