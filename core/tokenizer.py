@@ -24,6 +24,25 @@ def merge(ids, pair, idx):
 
     return newIDs
 
+def decode(ids):
+    tokens = b"".join(vocab[idx] for idx in ids)
+    return tokens.decode('utf-8', errors='replace')
+
+def encode(text):
+    tokens = text.encode('utf-8')
+    while True:
+        stats = _get_stats(tokens)
+        pair = min(stats, key=lambda p: merges.get(p, float('inf')))
+        if pair not in merges:
+            break # nothing else can be merged
+        idx = merges[pair]
+        tokens = merge(tokens, pair, idx)
+    return tokens
+
+
+
+
+
 
 vocab_size = 276
 num_merges = vocab_size - 256
@@ -38,9 +57,14 @@ for i in range(num_merges):
     ids = merge(ids, pair, idx)
     merges[pair] = idx
 
+vocab = {idx: bytes([idx]) for idx in range(256)}
+for (p0, p1), idx in merges.items():
+    vocab[idx] = vocab[p0] + vocab[p1] # byte objects
+
 
 print(tokens)
 print(merges)
 print(ids)
-
+print(decode(ids))
+print(decode(encode("h")))
 
